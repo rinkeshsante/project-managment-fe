@@ -1,0 +1,21 @@
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background-color: #f4f4f4;
+}
+
+.column {
+  flex: 1;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.card {
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
