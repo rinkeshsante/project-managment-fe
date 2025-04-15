@@ -1,38 +1,38 @@
-name: Deploy to AWS
+name: Upload Website
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Set up AWS CLI
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1 # Replace with your AWS region
+          node-version: "20"
 
-      # Install dependencies (if applicable)
       - name: Install dependencies
-        run: |
-          npm install  # Replace with your package manager if not using Node.js
+        run: npm install
+        working-directory: apps/client
 
-      # Build the project (if applicable)
-      - name: Build project
-        run: |
-          npm run build  # Replace with your build command
+      - name: Build app
+        run: npm run build
+        working-directory: apps/client
 
-      # Deploy to AWS (e.g., S3, ECS, Lambda, etc.)
-      - name: Deploy to S3
-        run: |
-          aws s3 sync ./build s3://your-bucket-name --delete
+      - name: Upload to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read
+        env:
+          SOURCE_DIR: apps/client/dist/
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
