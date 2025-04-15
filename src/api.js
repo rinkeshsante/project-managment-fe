@@ -1,7 +1,7 @@
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
 export const fetchTodos = async () => {
-  const response = await fetch(`${API_URL}`);
+  const response = await fetch(`${API_URL}?_limit=10`);
   return response.json();
 };
 
