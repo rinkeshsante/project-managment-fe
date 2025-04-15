@@ -6,7 +6,7 @@ const AddTodoForm = ({ onAddTodo }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title.trim()) {
-      onAddTodo({ title });
+      onAddTodo({ text: title, title });
       setTitle("");
     }
   };
